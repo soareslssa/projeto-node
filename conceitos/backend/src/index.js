@@ -2,12 +2,15 @@ const { request, response } = require('express');
 const express = require('express');
 const app = express();
 
+// deve vir no inicio da aplicação
+app.use(express.json());
+
 /** Rota que retorna informações para o usuário. */
 /**
  * Tipo de parametros:
  * Query Params: Filtros e paginação
- * Route Params:
- * Request Body:
+ * Route Params: Identificar recursos (atualizar/deletar)
+ * Request Body: Conteúdo na hora de criar ou editar um recurso(JSON)
  */
 app.get('/', (request, response) => {
   return response.json({
@@ -45,7 +48,10 @@ app.delete('/projects/:id', (request,response) => {
 });
 
 app.post('/projects', (request, response) => {
-    return response.json([
+  const body = request.body;
+  console.log(body);  
+  
+  return response.json([
       'Projeto 1',
       'Projeto 2',
       'Projeto 3'
