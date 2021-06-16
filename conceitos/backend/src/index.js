@@ -28,6 +28,10 @@ app.get('/projects', (request,response) => {
 });
 
 app.put('/projects/:id', (request,response) => {
+  // setta os route params 
+  const {id} = request.params;
+  console.log(id);
+ 
   return response.json([
     'Projeto 3',
     'Projeto 2'
