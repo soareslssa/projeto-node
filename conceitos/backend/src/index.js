@@ -1,17 +1,13 @@
 const { request, response } = require('express');
 const express = require('express');
 const app = express();
+const {uuid} = require('uuidv4');
 
 // deve vir no inicio da aplicação
 app.use(express.json());
 
-/** Rota que retorna informações para o usuário. */
-/**
- * Tipo de parametros:
- * Query Params: Filtros e paginação
- * Route Params: Identificar recursos (atualizar/deletar)
- * Request Body: Conteúdo na hora de criar ou editar um recurso(JSON)
- */
+const projects = [];
+
 app.get('/', (request, response) => {
   return response.json({
     message: 'Hello World!',
@@ -19,43 +15,55 @@ app.get('/', (request, response) => {
 });
 
 app.get('/projects', (request,response) => {
-  // setta tudo o que é passado como parametro query na url
-  const {title, autor} = request.query; 
-  console.log(title);
-  console.log(autor);
+  const {title} = request.query;
 
-  return response.json([
-    'Projeto 1',
-    'Projeto 2'
-  ]);
+  const results = title 
+  ? projects.filter(project => project.title.includes(title))
+  : projects;
+
+  return response.json(results);
 });
 
 app.put('/projects/:id', (request,response) => {
-  // setta os route params 
   const {id} = request.params;
-  console.log(id);
+  const {title, owner} = request.body;
+
+  const projectIndex = projects.findIndex(project => project.id == id);
  
-  return response.json([
-    'Projeto 3',
-    'Projeto 2'
-  ]);
+  if(projectIndex < 0){
+    return response.status(400).json({error: 'Project not found.'});
+  }
+
+  const project = {id,title,owner};
+
+  projects[projectIndex] = project;
+
+  return response.json(project);
 });
 
 app.delete('/projects/:id', (request,response) => {
-  return response.json([
-    'Projeto 2'
-  ]);
+  const {id} = request.params;
+
+  const projectIndex = projects.findIndex(project => project.id == id);
+
+  if(projectIndex < 0){
+    return response.status(400).json({error: 'Project not found.'});
+  }
+
+  projects.slice(projectIndex, 1);
+
+  // retorna em branco, apenas o status
+  return response.status(204).send();
 });
 
 app.post('/projects', (request, response) => {
-  const body = request.body;
-  console.log(body);  
+ const {title, owner} = request.body;
+
+ const project = {id: uuid(),title, owner};
+
+ projects.push(project);
   
-  return response.json([
-      'Projeto 1',
-      'Projeto 2',
-      'Projeto 3'
-    ])
+  return response.json(project);
 });
 
 app.listen(3333, () => {
