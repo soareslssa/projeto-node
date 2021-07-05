@@ -1,3 +1,4 @@
-import {soma} from './soma';
+import React from 'react';
+import { render} from 'react-dom';
 
-console.log(soma(5,3));
+render(<h1>Hello World</h1>, document.getElementById('app'))
