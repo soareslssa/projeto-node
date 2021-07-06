@@ -2,8 +2,10 @@ const { request, response } = require('express');
 const express = require('express');
 const app = express();
 const {uuid, isUuid} = require('uuidv4');
+const cors = require('cors');
 
 // deve vir no inicio da aplicação
+app.use(cors());
 app.use(express.json());
 
 /**
