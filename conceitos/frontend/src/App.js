@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import Header from './components/Header'
 import {Button} from 'react-bootstrap'
+import './App.css';
+
+import BgImage from './assets/background.jpg';
 
 function App(){
 
@@ -21,6 +24,8 @@ function App(){
     <>
       <center>
         <Header title="Projects"/>
+
+        <img width="100%" src={BgImage}/>
 
         <ul>
           {projects.map(project => <li key={project}>{project}</li>)}
